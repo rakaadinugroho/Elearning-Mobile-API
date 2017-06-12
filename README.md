@@ -1,13 +1,22 @@
-# CodeIgniter User Authentication
+# Elearning Mobile API
 
-Simple Codeigniter, REST Server, JWT implementation for User Authentication.
+Halo! ini adalah kode terbuka untuk mengintegrasikan dengan [Elearning Mobile](http://github.com/rakaadinugroho/Elarning-Mobile) .
 
-How To Use
+#Teknologi Pengembangan
+1. CodeIgniter
+2. JWT Authentication , contoh sederhananya [Disini](https://github.com/rakaadinugroho/Codeigniter-JWT-User-Authentication)
+3. RESTFul APi ( dengan format JSON)
+
+Penggunaan
 =====
-
-Create Database on MySQL
+1. Untuk management Soal/Guru/Dll menggunakan dasar aplikasi dari [Bang Akhwan90](https://github.com/akhwan90/cat).
+2. Setup Table dari Sistem [Bang Akhwan90](https://github.com/akhwan90/cat)
+3. Modifikasi Tabelnya dengan menambahkan sepertidibawah ini.
+4. Tambahkan Kolom `Thumbnail` pada table `m_mapel` dan `tr_guru_tes` .
+5. Tambahkan Trigger Untuk Menghapus `m_admin` jika `m_siswa` atau `m_guru` dihapus.
+6. Tahbahkan SQL Berikut, Buat Table on MySQL
     
-    CREATE TABLE `keys` (
+        CREATE TABLE keys (
        `id` int(11) NOT NULL,
        `user_id` int(11) NOT NULL,
        `key` varchar(40) NOT NULL,
@@ -16,19 +25,12 @@ Create Database on MySQL
        `is_private_key` tinyint(1) NOT NULL DEFAULT '0',
        `ip_addresses` text,
        `date_created` int(11) NOT NULL
-     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-     
-     -- --------------------------------------------------------
-     
-     --
-     -- Table structure for table `m_user`
-     --
-     
-     CREATE TABLE `m_user` (
-       `user_id` int(11) NOT NULL,
-       `username` varchar(255) NOT NULL,
-       `password` varchar(255) NOT NULL,
-       `namalengkap` varchar(255) NOT NULL,
-       `status` enum('active','banned','','') NOT NULL DEFAULT 'active'
-     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-     
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+7. Sesuaikan `config.php` dan `database.php` di `Application/config` pada sistem API
+8. Tara!!!
+
+Demikian :)
+
+## Dibangun Oleh
+1. [Raka Adi Nugroho](http://github.com/rakaadinugroho)
+2. Yourname?

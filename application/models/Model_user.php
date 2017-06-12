@@ -9,10 +9,13 @@
 class Model_user extends CI_Model
 {
     var $tablename;
+    var $tablesiswa;
+
     public function __construct()
     {
         parent::__construct();
-        $this->tablename    = "m_user";
+        $this->tablename    = "m_admin";
+        $this->tablesiswa   = "m_siswa";
     }
 
     public function user_check($data = array())
@@ -20,13 +23,22 @@ class Model_user extends CI_Model
         $params = array(
             'username'  => $data['username'],
             'password'  => $data['password'],
-            'status'    => 'active'
         );
         $this->db->where($params);
         $query  = $this->db->get($this->tablename);
         return $query->row();
     }
-
+    public function siswa_check($data = array())
+    {
+        $this->db->where($data);
+        $query  = $this->db->get($this->tablesiswa);
+        return $query->row();
+    }
+    public function siswa_create($data = array())
+    {
+        $query  = $this->db->insert($this->tablesiswa, $data);
+        return $query;
+    }
     public function user_create($data = array())
     {
         $query  = $this->db->insert($this->tablename, $data);
@@ -43,7 +55,10 @@ class Model_user extends CI_Model
         );
 
         $this->db->where($conditions);
-        $query  = $this->db->update($this->tablename, $params);
-        return $query;
+        $this->db->update($this->tablename, $params);
+        if ($this->db->affected_rows() > 0)
+            return true;
+        else
+            return false;
     }
 }

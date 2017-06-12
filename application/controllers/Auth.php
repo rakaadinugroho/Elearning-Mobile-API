@@ -14,24 +14,39 @@ class Auth extends REST_Controller
         $this->load->model('model_user','user');
         $params = array(
             'username'  => $this->post('username'),
-            'password'  => sha1($this->post('password'))
+            'password'  => md5($this->post('password'))
         );
         $result  = $this->user->user_check($params);
         if ($result){
-            $tokenData  = array();
-            $tokenData['id']    = $result->user_id;
+            if ($result->level == "siswa"){
+                $tokenData  = array();
+                $tokenData['id']    = $result->id;
+                # Load detail siswa
+                $studentparams  = array(
+                    'id'    => $result->kon_id,
+                );
+                $resultstudent  = $this->user->siswa_check($studentparams);
 
-            $response   = array(
-                "status"    => true,
-                "message"   => "Authentication successfully",
-                "auth"      => array(
-                    "fullname"  => $result->namalengkap,
-                    "token"     => AUTHORIZATION::generateToken($tokenData),
-                    "username"  => $result->username
-                )
-            );
+                $response   = array(
+                    "status"    => true,
+                    "message"   => "Authentication successfully",
+                    "auth"      => array(
+                        "userid"    => (int)$result->id,
+                        "userkon"   => (int)$result->kon_id,
+                        "fullname"  => $resultstudent->nama,
+                        "token"     => AUTHORIZATION::generateToken($tokenData),
+                        "username"  => $result->username
+                    )
+                );
+                $this->set_response($response, REST_Controller::HTTP_OK);
 
-            $this->set_response($response, REST_Controller::HTTP_OK);
+            }else{
+                $response   = array(
+                    "status"    => false,
+                    "message"   => "This features does'nt exist for your Account"
+                );
+                $this->set_response($response, REST_Controller::HTTP_OK);
+            }
         }
         else{
             $response   = array(
@@ -49,18 +64,33 @@ class Auth extends REST_Controller
     {
         $this->load->model('model_user','user');
         $params = array(
-            'username'  => $this->post('username'),
-            'password'  => sha1($this->post('password')),
-            'namalengkap'   => $this->post('fullname')
+            'nama'  => $this->post('fullname'),
+            'jurusan'   => $this->post('stage'),
+            'nim'   => strtoupper(substr(uniqid(), 0, 5))
         );
-
-        $result = $this->user->user_create($params);
+        $result = $this->user->siswa_create($params);
         if ($result){
-            $response   = array(
-                "status"    => true,
-                "message"   => "Register Successfully"
+            $checkdata  = $this->user->siswa_check(array('nim' => $params['nim']));
+            $userparams = array(
+                'username'  => $this->post('username'),
+                'password'  => md5($this->post('password')),
+                'level' => 'siswa',
+                'kon_id'    => $checkdata->id
             );
-            $this->set_response($response, REST_Controller::HTTP_OK);
+            $resultuser = $this->user->user_create($userparams);
+            if ($resultuser){
+                $response   = array(
+                    "status"    => true,
+                    "message"   => "Register Successfully"
+                );
+                $this->set_response($response, REST_Controller::HTTP_OK);
+            }else{
+                $response   = array(
+                    "status"    => false,
+                    "message"   => "Error, Signup failed user cannot catch"
+                );
+                $this->set_response($response, REST_Controller::HTTP_OK);
+            }
         }else{
             $response   = array(
                 "status"    => false,
@@ -84,8 +114,8 @@ class Auth extends REST_Controller
                 if (!is_null($decodedToken->id)) {
                     $params = array(
                         'username'  => $this->post('username'),
-                        'oldpassword'   => $this->post('oldpassword'),
-                        'newpassword'   => $this->post('newpassword')
+                        'oldpassword'   => md5($this->post('oldpassword')),
+                        'newpassword'   => md5($this->post('newpassword'))
                     );
 
                     $result = $this->user->change_password($params);
