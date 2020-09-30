@@ -1,6 +1,6 @@
 # Elearning Mobile API
 
-Halo! ini adalah kode terbuka untuk mengintegrasikan dengan [Elearning Mobile](http://github.com/rakaadinugroho/Elarning-Mobile) .
+Hallo! ini adalah kode terbuka untuk mengintegrasikan dengan [Elearning Mobile](http://github.com/rakaadinugroho/Elarning-Mobile) .
 
 #Teknologi Pengembangan
 1. CodeIgniter
@@ -9,9 +9,9 @@ Halo! ini adalah kode terbuka untuk mengintegrasikan dengan [Elearning Mobile](h
 
 Penggunaan
 =====
-1. Untuk management Soal/Guru/Dll menggunakan dasar aplikasi dari [Bang Akhwan90](https://github.com/akhwan90/cat).
+1. Untuk management Soal/Guru/Dll bisa menggunakan dasar aplikasi dari [Bang Akhwan90](https://github.com/akhwan90/cat).
 2. Setup Table dari Sistem [Bang Akhwan90](https://github.com/akhwan90/cat)
-3. Modifikasi Tabelnya dengan menambahkan sepertidibawah ini.
+3. Modifikasi Tabelnya dengan menambahkan seperti dibawah ini.
 4. Tambahkan Kolom `Thumbnail` pada table `m_mapel` dan `tr_guru_tes` .
 5. Tambahkan Trigger Untuk Menghapus `m_admin` jika `m_siswa` atau `m_guru` dihapus.
 6. Tahbahkan SQL Berikut, Buat Table on MySQL
